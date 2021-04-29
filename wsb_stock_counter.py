@@ -3,6 +3,7 @@ from pmaw import PushshiftAPI
 from datetime import datetime
 import csv
 from gensim.parsing.preprocessing import remove_stopwords
+from matplotlib import pyplot  as plt
 
 punctuation = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 stock_count={}
@@ -19,7 +20,7 @@ starttime=int(datetime(2021, 1, 30).timestamp())
 beforetime=int(datetime(2021, 2, 2).timestamp())
 
 submissions = api.search_submissions(after=starttime,before=beforetime,subreddit="wallstreetbets", 
-                                                        filter=['title','created_utc'],limit=3000)
+                                                        filter=['title','created_utc'],limit=6000)
 
 df = pd.DataFrame(submissions)
 #posts=df['title']
@@ -49,3 +50,6 @@ df_stock_count=pd.DataFrame(list(stock_count.items()),columns=['stock','count'])
 
 #print(df_stock_count)
 df_stock_count.to_csv('wallstreetbets.csv', header=True, index=True)
+
+df_stock_count.head().plot.bar(x='stock',y='count')
+plt.show() 
